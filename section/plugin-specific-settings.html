@@ -1,0 +1,15 @@
+<h3>OsgiEquinox / Eclipse RCP</h3><p>OsgiEquinox / Eclipse plugin provides hotswap support for Eclipse plugin or Eclipse platform development (Do not confuse it with common development in Eclipse!).</p><p>Following options should be setup in eclipse.ini for debugee Eclipse instance:</p>
+<pre><code> # use application classloader for the framework
+-Dosgi.frameworkParentClassloader=app
+ # development classpath that is added to each plugin classpath
+-Dosgi.dev=[extra_classpath]
+ # use dcevm as JVM
+-XXaltjvm=dcevm
+ # enable hotswapagent
+-javaagent:PATH_TO_AGENT/hotswap-agent.jar
+ # enable remote debugging on port 8000
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000
+</code></pre><p>extra_classpath points to directory with compiled classes. When a new class is compiled it is sent by remote debugger to HotswapAgent. HotswapAgent stores this file into extra_classpath directory.</p><p>It is also necessary to setup following hotswap-agent.properties:</p>
+<pre><code>extraClasspath=[extra_classpath]
+osgiEquinox.debugMode=true
+</code></pre><p>then connect the IDE debugger (eclipse, netbeans or idea) to port 8000 and happy hotswapping!</p>

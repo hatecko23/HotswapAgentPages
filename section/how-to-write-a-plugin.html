@@ -1,0 +1,8 @@
+<p>You can write plugin directly as a part of your application. Set <code>pluginPackages=your.plugin.package</code> inside your <code>hotswap-agent.properties</code> configuration to discover <code>@Plugin</code> annotated classes. You will also need agent JAR dependency to compile, but be careful NOT to add the JAR to your application, it must be loaded only as a javaagent. Maven dependency:</p>
+<pre><code>    &lt;dependency&gt;
+        &lt;groupId&gt;org.hotswap.agent&lt;/groupId&gt;
+        &lt;artifactId&gt;HotswapAgent&lt;/artifactId&gt;
+        &lt;version&gt;${project.version}&lt;/version&gt;
+        &lt;scope&gt;provided&lt;/scope&gt;
+    &lt;/dependency&gt;
+</code></pre><p>(Note that the JAR is not yet in central maven repository - you need to build it from source first).</p><p>See <a href="https://github.com/HotswapProjects/HotswapAgentExamples/blob/master/SpringHibernate/src/main/java/org/hotswap/agent/it/plugin/ExamplePlugin.java">ExamplePlugin</a> (part of TestApplication) to go through a commented simple plugin. Read <a href="https://github.com/HotswapProjects/HotswapAgent/blob/master/README.md">agent readme</a>  to understand agent concepts. Check existing plugins source code for more examples.</p>

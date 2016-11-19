@@ -1,0 +1,7 @@
+<p>Launch <code>run-tests.sh</code> script in the main directory. Currently you have to setup JAVA_HOME location directory manually. At least Java 7 and Java 8 with DCEVM should be checked before a release. All automatic tests are set to fail the whole script in case of any single test failure.</p><p>Go to directory representing repository root. In case DCEVM is named <code>dcevm</code></p>
+<pre><code>mvn release:prepare
+mvn release:perform
+</code></pre><p>In case your DCEVM is named differently i.e. <code>server</code></p>
+<pre><code>mvn release:prepare -Darguments=&quot;-Ddcevm=server&quot;
+mvn release:perform -Darguments=&quot;-Ddcevm=server&quot;
+</code></pre>

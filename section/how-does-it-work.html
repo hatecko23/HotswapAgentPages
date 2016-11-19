@@ -1,0 +1,39 @@
+<h3>DCEVM</h3><p>Hotswap agent does the work of reloading resources and framework configuration (Spring, Hibernate, ...), but it depends on standard Java hotswap mechanism to actually reload classes. Standard Java hotswap allows only method body change , which makes it practically unusable. DCEVM is a JRE patch witch allows almost any structural class change on hotswap (with an exception of a hierarchy change). Although hotswap agent works even with standard java, we recommend to use DCEVM (and all tutorials use DCEVM as target JVM).</p><h3>Hotswap agent</h3><p>Hotswap agent is a plugin container with plugin manager, plugin registry, and several agent services (e.g. to watch for class/resource change). It helps with common tasks and classloading issues. It scans classpath for class annotated with @Plugin annotation, injects agent services and registers reloading hooks. Runtime bytecode modification is provided by javaasist library.</p><h3>Plugins</h3><p>Plugins administered by Hotswap agent are usually targeted towards a specific framework. For example Spring plugin uses agent services to:</p>
+<ul>
+  <li>Modify root Spring classes to get Spring contexts and registered scan path</li>
+  <li>Watch for any resource change on a scan path</li>
+  <li>Watch for a hotswap of a class file within a scan path package</li>
+  <li>Reload bean definition after a change</li>
+  <li>... and many other</li>
+</ul><p>Packaged plugins:</p>
+<ul>
+  <li>Hibernate (3x,4x) - Reload Hibernate configuration after entity create/change.</li>
+  <li>Spring (3x, 4.x) - Reload Spring configuration after class definition/change.</li>
+  <li>Jetty - add extra classpath to the app classloader. All versions supporting WebAppContext.getExtraClasspath should be supported.</li>
+  <li>Tomcat (7.x, 8.x) configure Apache Tomcat with extraClasspath property.</li>
+  <li>Jersey</li>
+  <li>ZK (5x-7x) - ZK Framework (http://www.zkoss.org/). Change library properties default values to disable caches, maintains Label cache and bean resolver cache.</li>
+  <li>Logback - Logback configuration reload</li>
+  <li>Log4j2 - Log4j2 configuration reload</li>
+  <li>Hotswapper - Watch for any class file change and reload (hotswap) it on the fly via Java Platform Debugger Architecture (JPDA)</li>
+  <li>AnonymousClassPatch - Swap anonymous inner class names to avoid not compatible changes.</li>
+  <li>ELResolver 2.2 (JuelEL, Appache Commons EL, Oracle EL 3.0)- clear ELResolver cache on class change. Support hotswap for #{...} expressions.</li>
+  <li>Seam (2.2, 2.3) - flush JBoss reference cache. Support for properties file change (messages[])</li>
+  <li>JBossModules - add extra class path to JBoss's module class loader.</li>
+  <li>JSF (mojarra 2.1, 2.2, MyFaces 2.2) - support for application resource bundle changes (properties files).</li>
+  <li>OsgiEquinox - Hotswap support for Eclipse plugin or Eclipse platform development.</li>
+  <li>RestEasy (2.x, 3.x) - Implemented by ResteasyRegistry plugin. Cleanups and registers class redefinitions.</li>
+  <li>CDI/Weld - reload bean class definition after class create(managed beans)/change. Proxy bean redefinition after proxied class change. EAR support. Bean reloading according strategy specified by parameter 'weld.beanReloadStrategy' in config file.</li>
+  <li>Deltaspike (1.x) - messages,ViewConfig, repository, proxy reloading.</li>
+  <li>WebObjects - Clear key value coding, component, action and validation caches after class change.</li>
+  <li>WildFlyELResolver - Clear BeanELResolver after any class redefinition.</li>
+  <li>Proxy (supported com.sun.proxy, CGlib) - redefines proxy classes that implement or extend changed interfaces or classes.</li>
+</ul><p>Find a detail documentation of each plugin in the plugin project main README.md file.</p><h3>Runtime overhead</h3><p>It really depends on how many frameworks you use and which caches are disabled. Example measurements for a large, real world enterprise application based on Spring + Hibernate, run on Jetty.</p>
+<pre><code>Setup                        | Startup time
+-----------------------------|-------------
+Run (plain Java)             | 23s
+Debug (plain Java)           | 24s
+Debug (plain DCEVM)          | 28s
+Agent - disabled all plugins | 31s
+Agent - all plugins          | 35s
+</code></pre>

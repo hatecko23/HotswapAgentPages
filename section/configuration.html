@@ -1,0 +1,7 @@
+<p>The basic configuration set to reload classes and resources from classpath known to the running application (classloader). If you need a different configuration, add hotswap-agent.properties file to the classpath root (e.g. <code>src/main/resources/hotswap-agent.properties</code>).</p><p>Detail documentation of available properties and default values can be found in the <a href="https://github.com/HotswapProjects/HotswapAgent/blob/master/hotswap-agent-core/src/main/resources/hotswap-agent.properties">agent properties file</a></p><h3>Hotswap agent command line options</h3><p>Full syntax of command line options is:</p>
+<pre><code>-javaagent:[yourpath/]hotswap-agent.jar=[option1]=[value1],[option2]=[value2]
+</code></pre><p>Hotswap agent accepts following options:</p>
+<ul>
+  <li>autoHotswap=true - watch all .class files for change and automatically Hotswap the class in the running application  (instead of running Hotswap from your IDE debugging session)</li>
+  <li>disablePlugin=[pluginName] - disable a plugin. Note that this will completely forbid the plugin to load (opposite to disablePlugin option in hotswap-agent.properties, which will only disable the plugin for a classloader. You can repeat this option for every plugin to disable.</li>
+</ul>
